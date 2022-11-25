@@ -1,1 +1,2 @@
 # algorithm_and_data_structure
+>用Python实现算法数据和结构的尝试
