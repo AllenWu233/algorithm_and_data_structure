@@ -1,16 +1,15 @@
 class Node(object):
     """节点类"""
+
     def __init__(self, data=None, left_child=None, right_child=None):
         self.data = data
         self.left_child = left_child
         self.right_child = right_child
 
 
-
 class Tree(object):
     def __init__(self):
         self.root = Node()
-
 
     def rec_pre_order(self, node=None):
         """递归实现前序遍历"""
@@ -19,9 +18,9 @@ class Tree(object):
             self.rec_pre_order(node.left_child)
             self.rec_pre_order(node.right_child)
 
-
     def pre_order(self):
         """非递归实现前序遍历"""
+        ls = None
         if self.root:
             ls = [self.root]
         while ls:
@@ -31,7 +30,6 @@ class Tree(object):
                 ls.append(node.right_child)
             if node.left_child:
                 ls.append(node.left_child)
-
 
     def pre_order2(self):
         """非递归实现前序遍历"""
@@ -46,14 +44,12 @@ class Tree(object):
                 node = stack.pop()
                 node = node.right_child
 
-
     def rec_in_order(self, node):
         """递归实现中序遍历"""
         if node:
             self.rec_in_order(node.left_child)
             print(node.data, end=" ")
             self.rec_in_order(node.right_child)
-
 
     def in_order(self):
         """非递归实现中序遍历"""
@@ -67,7 +63,6 @@ class Tree(object):
                 node = ls.pop()
                 print(node.data, end=" ")
                 node = node.right_child
-
 
     def in_order2(self):
         """非递归实现中序遍历"""
@@ -89,14 +84,12 @@ class Tree(object):
             else:
                 node = None
 
-
     def rec_post_order(self, node):
         """递归实现后序遍历"""
         if node:
             self.rec_post_order(node.left_child)
             self.rec_post_order(node.right_child)
             print(node.data, end=" ")
-
 
     def post_order(self, node):
         """非递归实现后序遍历"""
@@ -116,9 +109,9 @@ class Tree(object):
             ls.append(node)
             node = node.right_child
 
-
     def get_depth(self):
         """计算树的深度，递归树的左右节点,取值大的深度"""
+
         def _depth(node):
             if not node:
                 return 0
@@ -126,12 +119,11 @@ class Tree(object):
                 left_depth = _depth(node.left_child)
                 right_depth = _depth(node.right_child)
                 if left_depth > right_depth:
-                    return left_depth + 1 
+                    return left_depth + 1
                 else:
                     return right_depth + 1
 
         return _depth(self.root)
-
 
     def get_leaves(self, node):
         """递归输出所有叶子节点"""
@@ -143,17 +135,18 @@ class Tree(object):
                 self.get_leaves(node.right_child)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     tree = Tree()
-    tree.root = Node('A')
-    tree.root.left_child = Node('B')
-    tree.root.right_child = Node('C')
-    tree.root.left_child.left_child = Node('D')
-    tree.root.left_child.right_child = Node('E')
-    tree.root.left_child.right_child.right_child = Node('F')
-    tree.root.left_child.left_child.right_child = Node('G')
+    tree.root = Node("A")
+    tree.root.left_child = Node("B")
+    tree.root.right_child = Node("C")
+    tree.root.left_child.left_child = Node("D")
+    tree.root.left_child.right_child = Node("E")
+    tree.root.left_child.right_child.right_child = Node("F")
+    tree.root.left_child.left_child.right_child = Node("G")
 
-    print("""
+    print(
+        """
                  A
                  |
            -------------
@@ -167,8 +160,9 @@ if __name__ == '__main__':
   -------     -------
   |     |     |     |
 (None)  G   (None)  F
-""")
-    
+"""
+    )
+
     print("#先序遍历")
     print("递归：")
     tree.rec_pre_order(tree.root)
@@ -184,7 +178,6 @@ if __name__ == '__main__':
     tree.in_order()
     print("\n非递归2：")
     tree.in_order2()
-
 
     print("\n\n#后序遍历")
     print("递归：")
