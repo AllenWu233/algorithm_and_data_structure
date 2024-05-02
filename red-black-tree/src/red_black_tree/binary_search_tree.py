@@ -37,15 +37,17 @@ class BSTree:
 
     def min(self, x):
         """Return the node with minium value of the tree/subtree"""
-        x = self._root
-        while x and x.left:
+        if x is None:
+            return None
+        while x.left:
             x = x.left
         return x
 
     def max(self, x):
         """Return the node with maximum value of the tree/subtree"""
-        x = self._root
-        while x and x.right:
+        if x is None:
+            return None
+        while x.right:
             x = x.right
         return x
 
@@ -147,9 +149,39 @@ class BSTree:
         if end == " ":
             print()
 
+    def bfs(self):
+        if self._root is None:
+            return
+        queue = [(0, self._root)]
+        cnt = -1
+        while queue:
+            t = queue.pop(0)
+            if t[0] == cnt:
+                print(t[1].key, end=" ")
+            else:
+                print(f"\n[{t[0]}] {t[1].key}", end=" ")
+                cnt = t[0]
+            if t[1].left:
+                queue.append((t[0] + 1, t[1].left))
+            if t[1].right:
+                queue.append((t[0] + 1, t[1].right))
+        print()
+
 
 if __name__ == "__main__":
-    a = BSTree([5, 1, 3, 0, 7, 8, 6])
+    a = BSTree([5, 1, 3, 0, 7, 8, 6, 10, 15, 14, 17, 19, 20, 22])
+
     a.print_tree(print_data=True, end="\n")
+    print()
+
     a.print_tree()
+    print()
+
     a.print_node(a.search(7), print_data=True)
+    a.print_node(a.search_rec(7), print_data=True)
+    print()
+
+    print("Min:", a.min(a._root).key)
+    print("Max:", a.max(a._root).key)
+
+    a.bfs()
