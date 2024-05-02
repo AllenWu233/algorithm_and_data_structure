@@ -169,19 +169,19 @@ class BSTree:
 
 
 if __name__ == "__main__":
-    a = BSTree([5, 1, 3, 0, 7, 8, 6, 10, 15, 14, 17, 19, 20, 22])
+    bstree = BSTree([5, 1, 3, 0, 7, 8, 6, 10, 15, 14, 17, 19, 20, 22])
 
-    a.print_tree(print_data=True, end="\n")
+    bstree.print_tree(print_data=True, end="\n")
     print()
 
-    a.print_tree()
+    bstree.print_tree()
     print()
 
-    a.print_node(a.search(7), print_data=True)
-    a.print_node(a.search_rec(7), print_data=True)
+    bstree.print_node(bstree.search(7), print_data=True)
+    bstree.print_node(bstree.search_rec(7), print_data=True)
     print()
 
-    print("Min:", a.min().key)
-    print("Max:", a.max().key)
+    print("Min:", bstree.min().key)
+    print("Max:", bstree.max().key)
 
-    a.bfs()
+    bstree.bfs()
