@@ -9,7 +9,7 @@ class Node:
 
 class BSTree:
     def __init__(self, key_list=[]):
-        self._root = None
+        self.root = None
         if key_list:
             for key in key_list:
                 self.insert(key)
@@ -23,11 +23,11 @@ class BSTree:
 
     def search_rec(self, k):
         """Recursive tree search"""
-        return self._search_rec(self._root, k)
+        return self._search_rec(self.root, k)
 
     def search(self, k):
         """Iterative tree search"""
-        x = self._root
+        x = self.root
         while x and x.key != k:
             if k < x.key:
                 x = x.left
@@ -35,19 +35,19 @@ class BSTree:
                 x = x.right
         return x
 
-    def min(self, x):
+    def min(self, x=None):
         """Return the node with minium value of the tree/subtree"""
         if x is None:
-            return None
-        while x.left:
+            x = self.root
+        while x and x.left:
             x = x.left
         return x
 
-    def max(self, x):
+    def max(self, x=None):
         """Return the node with maximum value of the tree/subtree"""
         if x is None:
-            return None
-        while x.right:
+            x = self.root
+        while x and x.right:
             x = x.right
         return x
 
@@ -78,7 +78,7 @@ class BSTree:
     def insert_node(self, z):
         """Insert a node in the binary search tree"""
         y = None
-        x = self._root
+        x = self.root
         while x:
             y = x
             if z.key < x.key:
@@ -87,7 +87,7 @@ class BSTree:
                 x = x.right
         z.p = y
         if y is None:
-            self._root = z
+            self.root = z
         elif z.key < y.key:
             y.left = z
         else:
@@ -100,7 +100,7 @@ class BSTree:
     def _transparent(self, u, v):
         """Replace a subtree rooted at u with a subtree rooted at v"""
         if u.p is None:
-            self._root = v
+            self.root = v
         elif u == u.p.left:
             u.p.left = v
         else:
@@ -145,14 +145,14 @@ class BSTree:
 
     def print_tree(self, print_data=False, end=" "):
         """Inorder tree walk"""
-        self._print_tree(self._root, print_data, end=end)
+        self._print_tree(self.root, print_data, end=end)
         if end == " ":
             print()
 
     def bfs(self):
-        if self._root is None:
+        if self.root is None:
             return
-        queue = [(0, self._root)]
+        queue = [(0, self.root)]
         cnt = -1
         while queue:
             t = queue.pop(0)
@@ -181,7 +181,7 @@ if __name__ == "__main__":
     a.print_node(a.search_rec(7), print_data=True)
     print()
 
-    print("Min:", a.min(a._root).key)
-    print("Max:", a.max(a._root).key)
+    print("Min:", a.min().key)
+    print("Max:", a.max().key)
 
     a.bfs()
