@@ -1,31 +1,39 @@
+from typing import Literal
+
+
 class Node:
-    def __init__(self, key=None, data=None, left=None, right=None, p=None):
+    def __init__(
+        self,
+        key: int,
+        data: list[int] | None = None,
+    ):
         self.key = key
         self.data = data
-        self.left = left
-        self.right = right
-        self.p = p
+        self.left: Node | None = None
+        self.right: Node | None = None
+        self.p: Node | None = None
 
 
 class BSTree:
-    def __init__(self, key_list=[]):
-        self.root = None
+    def __init__(self, key_list: list[int] = []):
+        self.root: Node | None = None
         if key_list:
             for key in key_list:
                 self.insert(key)
+        self._nil = Node(key=0)  # An empty node, key value dose not make sence
 
-    def _search_rec(self, x, k):
+    def search_rec(self, k: int) -> Node | None:
+        """Recursive tree search"""
+        return self._search_rec(self.root, k)
+
+    def _search_rec(self, x: Node | None, k: int) -> Node | None:
         if x is None or x.key == k:
             return x
         if k < x.key:
             return self._search_rec(x.left, k)
         return self._search_rec(x.right, k)
 
-    def search_rec(self, k):
-        """Recursive tree search"""
-        return self._search_rec(self.root, k)
-
-    def search(self, k):
+    def search(self, k: int) -> Node | None:
         """Iterative tree search"""
         x = self.root
         while x and x.key != k:
@@ -35,7 +43,7 @@ class BSTree:
                 x = x.right
         return x
 
-    def min(self, x=None):
+    def min(self, x: Node | None = None) -> Node | None:
         """Return the node with minium value of the tree/subtree"""
         if x is None:
             x = self.root
@@ -43,7 +51,7 @@ class BSTree:
             x = x.left
         return x
 
-    def max(self, x=None):
+    def max(self, x: Node | None = None) -> Node | None:
         """Return the node with maximum value of the tree/subtree"""
         if x is None:
             x = self.root
@@ -51,7 +59,7 @@ class BSTree:
             x = x.right
         return x
 
-    def successor(self, x):
+    def successor(self, x: Node) -> Node | None:
         """Return the successor node"""
         if x is None:
             return None
@@ -63,7 +71,7 @@ class BSTree:
             y = y.p
         return y
 
-    def predecessor(self, x):
+    def predecessor(self, x: Node) -> Node | None:
         """Return the predecessor node"""
         if x is None:
             return None
@@ -75,7 +83,11 @@ class BSTree:
             y = y.p
         return y
 
-    def insert_node(self, z):
+    def insert(self, v: int, data: list[int] | None = None):
+        """Create a node with key and data, insert it in the tree"""
+        self.insert_node(Node(key=v, data=data))
+
+    def insert_node(self, z: Node):
         """Insert a node in the binary search tree"""
         y = None
         x = self.root
@@ -93,12 +105,10 @@ class BSTree:
         else:
             y.right = z
 
-    def insert(self, v, data=None):
-        """Create a node with key and data, insert it in the tree"""
-        self.insert_node(Node(key=v, data=data))
-
-    def _transparent(self, u, v):
+    def _transparent(self, u: Node | None, v: Node | None):
         """Replace a subtree rooted at u with a subtree rooted at v"""
+        if u is None or v is None:
+            return
         if u.p is None:
             self.root = v
         elif u == u.p.left:
@@ -108,7 +118,7 @@ class BSTree:
         if u:
             v.p = u.p
 
-    def delete_node(self, z):
+    def delete_node(self, z: Node):
         """Delete given node"""
         if z.left is None:
             self._transparent(z, z.right)
@@ -126,7 +136,7 @@ class BSTree:
             y.left = z.left
             y.left.p = y
 
-    def print_node(self, x, print_data=False, end="\n"):
+    def print_node(self, x: Node | None, print_data: bool = False, end: str = "\n"):
         if x is None:
             print(None, end=end)
         else:
@@ -136,26 +146,32 @@ class BSTree:
             else:
                 print(x.key, end=end)
 
-    def _print_tree(self, x, print_data, end):
+    def print_tree(
+        self, x: Node | None = None, print_data: bool = False, end: str = " "
+    ):
+        """Inorder tree walk"""
+        if x is None:
+            x = self.root
+        self._print_tree(x, print_data, end=end)
+        if end == " ":
+            print()
+
+    def _print_tree(self, x: Node | None, print_data: bool, end: str):
         if x is None:
             return
         self._print_tree(x.left, print_data, end)
         self.print_node(x, print_data, end=end)
         self._print_tree(x.right, print_data, end)
 
-    def print_tree(self, print_data=False, end=" "):
-        """Inorder tree walk"""
-        self._print_tree(self.root, print_data, end=end)
-        if end == " ":
-            print()
-
-    def bfs(self):
-        if self.root is None:
-            return
-        queue = [(0, self.root)]
+    def bfs(self, x: Node | None = None):
+        if x is None:
+            x = self.root
+        queue: list[tuple[Literal[0], Node | None]] = [(0, x)]
         cnt = -1
         while queue:
             t = queue.pop(0)
+            if t[1] is None:
+                return
             if t[0] == cnt:
                 print(t[1].key, end=" ")
             else:
@@ -185,3 +201,5 @@ if __name__ == "__main__":
     print("Max:", bstree.max().key)
 
     bstree.bfs()
+
+    b = Node(1)
