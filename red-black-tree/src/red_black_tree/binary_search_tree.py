@@ -15,7 +15,9 @@ class Node:
 
 
 class BSTree:
-    def __init__(self, key_list: list[int] = []):
+    def __init__(self, key_list: list[int] | None = None):
+        if key_list is None:
+            key_list = []
         self.root: Node | None = None
         if key_list:
             for key in key_list:
@@ -105,7 +107,7 @@ class BSTree:
         else:
             y.right = z
 
-    def _transparent(self, u: Node | None, v: Node | None):
+    def _trans_plant(self, u: Node | None, v: Node | None):
         """Replace a subtree rooted at u with a subtree rooted at v"""
         if u is None or v is None:
             return
@@ -118,23 +120,28 @@ class BSTree:
         if u:
             v.p = u.p
 
-    def delete_node(self, z: Node):
+    def _delete_node(self, z: Node | None):
         """Delete given node"""
+        if z is None:
+            return
         if z.left is None:
-            self._transparent(z, z.right)
+            self._trans_plant(z, z.right)
         elif z.right is None:
-            self._transparent(z, z.left)
+            self._trans_plant(z, z.left)
         else:
             y = self.min(z.right)
             if y is None:
                 return
             if y.p != z:
-                self._transparent(y, y.right)
+                self._trans_plant(y, y.right)
                 y.right = z.right
                 y.right.p = y
-            self._transparent(z, y)
+            self._trans_plant(z, y)
             y.left = z.left
             y.left.p = y
+
+    def delete(self, key: int):
+        self._delete_node(self.search(key))
 
     def print_node(self, x: Node | None, print_data: bool = False, end: str = "\n"):
         if x is None:
@@ -165,13 +172,14 @@ class BSTree:
 
     def bfs(self, x: Node | None = None):
         if x is None:
+            if self.root is None:
+                return
             x = self.root
+
         queue: list[tuple[Literal[0], Node | None]] = [(0, x)]
         cnt = -1
         while queue:
             t = queue.pop(0)
-            if t[1] is None:
-                return
             if t[0] == cnt:
                 print(t[1].key, end=" ")
             else:
